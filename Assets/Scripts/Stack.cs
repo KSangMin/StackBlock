@@ -278,7 +278,9 @@ public class Stack : MonoBehaviour
         go.transform.localScale = scale;
         go.transform.localRotation = Quaternion.identity;
 
-        go.AddComponent<Rigidbody>();
+        Rigidbody rb = go.AddComponent<Rigidbody>();
+        rb.AddForce(
+            (Vector3.right * (Random.Range(0, 10f) - 5f)) * 100f);
         go.name = "Rubble";
     }
 
@@ -340,28 +342,28 @@ public class Stack : MonoBehaviour
         for(int i = 0; i< childCount; i++)
         {
             Destroy(transform.GetChild(i).gameObject);
-
-            isGameOver = false;
-
-            lastBlock = null;
-            desiredPos = Vector3.zero;
-            stackBounds = new Vector3(boundSize, boundSize);
-
-            stackCount = -1;
-            isMovingX = true;
-            blockTransition = 0f;
-            secondaryPos = 0f;
-
-            comboCount = 0;
-            maxCombo = 0;
-
-            prevBlockPos = Vector3.down;
-
-            prevColor = GetRandomColor();
-            nextColor = GetRandomColor();
-
-            SpawnBlock();
-            SpawnBlock();
         }
+
+        isGameOver = false;
+
+        lastBlock = null;
+        desiredPos = Vector3.zero;
+        stackBounds = new Vector3(boundSize, boundSize);
+
+        stackCount = -1;
+        isMovingX = true;
+        blockTransition = 0f;
+        secondaryPos = 0f;
+
+        comboCount = 0;
+        maxCombo = 0;
+
+        prevBlockPos = Vector3.down;
+
+        prevColor = GetRandomColor();
+        nextColor = GetRandomColor();
+
+        SpawnBlock();
+        SpawnBlock();
     }
 }
