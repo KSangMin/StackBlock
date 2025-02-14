@@ -41,7 +41,7 @@ public class Stack : MonoBehaviour
     const string BestScoreKey = "BestScore";
     const string BestComboKey = "BestCombo";
 
-    bool isGameOver = false;
+    bool isGameOver = true;
 
     void Start()
     {
@@ -59,7 +59,6 @@ public class Stack : MonoBehaviour
 
         prevBlockPos = Vector3.down;
 
-        SpawnBlock();
         SpawnBlock();
     }
 
@@ -82,6 +81,7 @@ public class Stack : MonoBehaviour
                 UpdateScore();
                 isGameOver = true;
                 GameOverEffect();
+                UIManager.Instance.SetScreUI();
             }
         }
 
@@ -124,6 +124,8 @@ public class Stack : MonoBehaviour
         lastBlock = newTrans;
 
         isMovingX = !isMovingX;
+
+        UIManager.Instance.UpdateScore();
 
         return true;
     }
@@ -328,6 +330,38 @@ public class Stack : MonoBehaviour
             rb.AddForce(
                 (Vector3.up * Random.Range(0, 10f)
                 + Vector3.right * (Random.Range(0, 10f) - 5f)) * 100f);
+        }
+    }
+
+    public void Restart()
+    {
+        int childCount = transform.childCount;
+
+        for(int i = 0; i< childCount; i++)
+        {
+            Destroy(transform.GetChild(i).gameObject);
+
+            isGameOver = false;
+
+            lastBlock = null;
+            desiredPos = Vector3.zero;
+            stackBounds = new Vector3(boundSize, boundSize);
+
+            stackCount = -1;
+            isMovingX = true;
+            blockTransition = 0f;
+            secondaryPos = 0f;
+
+            comboCount = 0;
+            maxCombo = 0;
+
+            prevBlockPos = Vector3.down;
+
+            prevColor = GetRandomColor();
+            nextColor = GetRandomColor();
+
+            SpawnBlock();
+            SpawnBlock();
         }
     }
 }
